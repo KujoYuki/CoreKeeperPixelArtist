@@ -1,0 +1,59 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CKPixelArtist.model
+{
+    public class Pixel
+    {
+        public int R { get; set; }
+        public int G { get; set; }
+        public int B { get; set; }
+
+        public Pixel(string RGB) 
+        {
+        
+        }
+
+        public void ToHSV(out double hue, out double s, out double v)
+        {
+            // RGBをHSVに変換するロジックをここに実装
+            // RGB値を0〜1の範囲に正規化
+            double r = R / 255.0;
+            double g = G / 255.0;
+            double b = B / 255.0;
+
+            // 最大値と最小値を取得
+            double max = Math.Max(r, Math.Max(g, b));
+            double min = Math.Min(r, Math.Min(g, b));
+            double delta = max - min;
+
+            // Hueの計算
+            if (delta == 0)
+            {
+                hue = 0; // 色相は定義されないが、0に設定
+            }
+            else if (max == r)
+            {
+                hue = 60 * (((g - b) / delta) % 6);
+            }
+            else if (max == g)
+            {
+                hue = 60 * (((b - r) / delta) + 2);
+            }
+            else // max == b
+            {
+                hue = 60 * (((r - g) / delta) + 4);
+            }
+        }
+
+        public void ToLab(out double L, out double a, out double b)
+        {
+            // RGBをLabに変換するロジックをここに実装
+            // 例: return new Lab(L, a, b);
+            throw new NotImplementedException();
+        }
+    }
+}
