@@ -1,3 +1,4 @@
+using CKPixelArtist.model;
 using System.Windows.Forms;
 
 namespace CKPixelArtist
@@ -92,8 +93,10 @@ namespace CKPixelArtist
 
         private void keepAspectCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            horizontalNumericUpDown.ReadOnly = !keepAspectCheckBox.Checked;
+            horizontalNumericUpDown.ReadOnly = keepAspectCheckBox.Checked;
             // TODO verticalNumericUpDown.Valueを変換する
+            //hack readonlyが想定と異なるのでチェックボックスマウスホイール操作等も受け付けないようにする
+            //TODO verticalNumericUpDownの方の値変更イベントを追加し、アスペクト比を維持させる
         }
 
         private void outputArtButton_Click(object sender, EventArgs e)
@@ -103,7 +106,47 @@ namespace CKPixelArtist
                 MessageBox.Show("先に入力画像をセットしてください");
             }
 
-            //todo pixelPictureBoxにドット絵を出力する処理
+            // 指定された縦横サイズを取得
+            int targetWidth = (int)horizontalNumericUpDown.Value;
+            int targetHeight = (int)verticalNumericUpDown.Value;
+
+            // 元画像を取得
+            Bitmap originalImage = new Bitmap(originPictureBox.Image!);
+
+            // ピクセルアートを生成
+            Bitmap pixelArtImage = GeneratePixelArt(originalImage, targetWidth, targetHeight);
+
+            // ピクセルの色をコアキでの近似色に変換する
+            //Bitmap ckArtImage = TranslateCKColor(pixelArtImage, (ColorModel)colorModelComboBox.SelectedItem, (MaterialColorLimit)limitItemComboBox.SelectedItem);
+
+            // pixelPictureBox に表示
+            pixelPictureBox.Image = pixelArtImage;
+
+        }
+
+        private Bitmap TranslateCKColor(Bitmap pixelArtImage, ColorModel selectedItem1, MaterialColorLimit selectedItem2)
+        {
+            throw new NotImplementedException();
+        }
+
+        private Bitmap GeneratePixelArt(Bitmap originalImage, int width, int height)
+        {
+            // 元画像を指定サイズに縮小
+            Bitmap resizedImage = new Bitmap(originalImage, new Size(width, height));
+
+            // HACK セルシェーディングを行う
+
+            // 縮小画像を元のサイズに拡大（ピクセルアート風にする）
+            Bitmap pixelArtImage = new Bitmap(resizedImage.Width * 10, resizedImage.Height * 10);
+            using (Graphics g = Graphics.FromImage(pixelArtImage))
+            {
+                // 拡大時に補間を無効化してピクセル感を保つ
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+                g.DrawImage(resizedImage, new Rectangle(0, 0, pixelArtImage.Width, pixelArtImage.Height));
+            }
+
+            return pixelArtImage;
         }
 
         private void outputRecipeButton_Click(object sender, EventArgs e)
@@ -119,6 +162,15 @@ namespace CKPixelArtist
         private void horizontalNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
 
+        }
+
+        //内部ロジック確認用
+        private void debugButton_Click(object sender, EventArgs e)
+        {
+            string objectName = "木の箱";
+            var debugPixel = new Pixel("723C11");
+            debugPixel.ToHSV(out double hue, out double saturation, out double value);
+            MessageBox.Show($"{objectName}\nHue: {hue:F2}, Saturation: {saturation:F2}, Value: {value:F2}");
         }
     }
 }

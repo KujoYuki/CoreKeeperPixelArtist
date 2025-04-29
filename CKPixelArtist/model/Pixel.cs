@@ -14,12 +14,14 @@ namespace CKPixelArtist.model
 
         public Pixel(string RGB) 
         {
-        
+            string lowerColorCode = RGB.ToLower();
+            R = Convert.ToInt32(lowerColorCode.Substring(0, 2), 16);
+            G = Convert.ToInt32(lowerColorCode.Substring(2, 2), 16);
+            B = Convert.ToInt32(lowerColorCode.Substring(4, 2), 16);
         }
 
-        public void ToHSV(out double hue, out double s, out double v)
+        public void ToHSV(out double hue, out double saturation, out double value)
         {
-            // RGBをHSVに変換するロジックをここに実装
             // RGB値を0〜1の範囲に正規化
             double r = R / 255.0;
             double g = G / 255.0;
@@ -47,6 +49,12 @@ namespace CKPixelArtist.model
             {
                 hue = 60 * (((r - g) / delta) + 4);
             }
+
+            // Saturationの計算
+            saturation = max == 0 ? 0 : delta / max * 100;
+
+            // Valueの計算
+            value = max * 100;
         }
 
         public void ToLab(out double L, out double a, out double b)

@@ -44,6 +44,7 @@
             label7 = new Label();
             outputArtButton = new Button();
             openImageFileDialog = new OpenFileDialog();
+            debugButton = new Button();
             ((System.ComponentModel.ISupportInitialize)verticalNumericUpDown).BeginInit();
             ((System.ComponentModel.ISupportInitialize)originPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pixelPictureBox).BeginInit();
@@ -94,7 +95,7 @@
             pixelPictureBox.Location = new Point(448, 12);
             pixelPictureBox.Name = "pixelPictureBox";
             pixelPictureBox.Size = new Size(309, 258);
-            pixelPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
+            pixelPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             pixelPictureBox.TabIndex = 4;
             pixelPictureBox.TabStop = false;
             // 
@@ -193,7 +194,7 @@
             // 
             outputArtButton.Location = new Point(448, 377);
             outputArtButton.Name = "outputArtButton";
-            outputArtButton.Size = new Size(75, 23);
+            outputArtButton.Size = new Size(108, 23);
             outputArtButton.TabIndex = 19;
             outputArtButton.Text = "ドット絵生成";
             outputArtButton.UseVisualStyleBackColor = true;
@@ -205,12 +206,23 @@
             openImageFileDialog.Filter = "画像ファイル|*.jpg;*.jpeg;*.png;*.bmp";
             openImageFileDialog.Title = "画像ファイルを選択してください。";
             // 
+            // debugButton
+            // 
+            debugButton.Location = new Point(682, 406);
+            debugButton.Name = "debugButton";
+            debugButton.Size = new Size(75, 23);
+            debugButton.TabIndex = 20;
+            debugButton.Text = "デバッグ用";
+            debugButton.UseVisualStyleBackColor = true;
+            debugButton.Click += debugButton_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.WhiteSmoke;
             ClientSize = new Size(807, 511);
+            Controls.Add(debugButton);
             Controls.Add(outputArtButton);
             Controls.Add(limitItemComboBox);
             Controls.Add(label7);
@@ -254,5 +266,6 @@
         private Label label7;
         private Button outputArtButton;
         private OpenFileDialog openImageFileDialog;
+        private Button debugButton;
     }
 }
