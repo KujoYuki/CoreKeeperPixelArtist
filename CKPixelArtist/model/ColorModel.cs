@@ -8,8 +8,8 @@ namespace CKPixelArtist.model
 {
     public enum ColorModel
     {
-        RGB = 0,
-        HSV = 1,
-        Lab = 2,
+        HSV = 0,
+        HSL = 1,
+        //Lab = 2,
     }
 }

@@ -104,6 +104,7 @@ namespace CKPixelArtist
             if (originPictureBox.Image is null)
             {
                 MessageBox.Show("先に入力画像をセットしてください");
+                return;
             }
 
             // 指定された縦横サイズを取得
@@ -111,22 +112,51 @@ namespace CKPixelArtist
             int targetHeight = (int)verticalNumericUpDown.Value;
 
             // 元画像を取得
-            Bitmap originalImage = new Bitmap(originPictureBox.Image!);
+            Bitmap originalImage = new Bitmap(originPictureBox.Image);
 
             // ピクセルアートを生成
             Bitmap pixelArtImage = GeneratePixelArt(originalImage, targetWidth, targetHeight);
-
-            // ピクセルの色をコアキでの近似色に変換する
-            //Bitmap ckArtImage = TranslateCKColor(pixelArtImage, (ColorModel)colorModelComboBox.SelectedItem, (MaterialColorLimit)limitItemComboBox.SelectedItem);
-
-            // pixelPictureBox に表示
             pixelPictureBox.Image = pixelArtImage;
 
+            // ピクセルの色をコアキでの近似色に変換する
+            SoumulizePixelArt(pixelArtImage, (MaterialColorLimit)limitItemComboBox.SelectedIndex, (ColorModel)colorModelComboBox.SelectedIndex);
         }
 
-        private Bitmap TranslateCKColor(Bitmap pixelArtImage, ColorModel selectedItem1, MaterialColorLimit selectedItem2)
+        private void SoumulizePixelArt(Bitmap pixelArtImage, MaterialColorLimit colorLimit, ColorModel colorModel)
         {
-            throw new NotImplementedException();
+            Dictionary<(int ObjectId, Variation Variation), Pixel> availableColorDic = Define.PaintableColor;
+
+            switch (colorLimit)
+            {
+                case MaterialColorLimit.PaintableMode:
+                    break;
+                case MaterialColorLimit.CraftableMode:
+                    availableColorDic.Concat(Define.CraftableColor);
+                    break;
+                case MaterialColorLimit.SoumuMode:
+                    availableColorDic.Concat(Define.CraftableColor).Concat(Define.CollectableColor);
+                    break;
+                default:
+                    break;
+            }
+
+            switch (colorModel)
+            {
+                case ColorModel.HSV:
+                    // HSVモデルでの処理
+                    break;
+                case ColorModel.HSL:
+                    MessageBox.Show("HSLモデルはβ版現在未実装です");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(colorModel), colorModel, null);
+            }
+
+            int width = pixelArtImage.Width;
+            int height = pixelArtImage.Height;
+
+            Bitmap resizedImage = new Bitmap(pixelPictureBox.Image);
+            soumulizedPictureBox.Image = resizedImage;
         }
 
         private Bitmap GeneratePixelArt(Bitmap originalImage, int width, int height)
@@ -145,7 +175,7 @@ namespace CKPixelArtist
                 g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
                 g.DrawImage(resizedImage, new Rectangle(0, 0, pixelArtImage.Width, pixelArtImage.Height));
             }
-
+            
             return pixelArtImage;
         }
 

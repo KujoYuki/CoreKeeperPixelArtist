@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35919.96 d17.13
+VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CKPixelArtist", "CKPixelArtist\CKPixelArtist.csproj", "{DD23064B-D5E4-477B-B1B4-B50D093E1F18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaletImporter", "PaletImporter\PaletImporter.csproj", "{B5394D82-1306-4A8F-B2CC-DD6C71996A18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{DD23064B-D5E4-477B-B1B4-B50D093E1F18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD23064B-D5E4-477B-B1B4-B50D093E1F18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD23064B-D5E4-477B-B1B4-B50D093E1F18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5394D82-1306-4A8F-B2CC-DD6C71996A18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5394D82-1306-4A8F-B2CC-DD6C71996A18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5394D82-1306-4A8F-B2CC-DD6C71996A18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5394D82-1306-4A8F-B2CC-DD6C71996A18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

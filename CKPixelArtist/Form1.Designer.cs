@@ -45,10 +45,12 @@
             outputArtButton = new Button();
             openImageFileDialog = new OpenFileDialog();
             debugButton = new Button();
+            soumulizedPictureBox = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)verticalNumericUpDown).BeginInit();
             ((System.ComponentModel.ISupportInitialize)originPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pixelPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)horizontalNumericUpDown).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)soumulizedPictureBox).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -92,7 +94,7 @@
             // pixelPictureBox
             // 
             pixelPictureBox.BorderStyle = BorderStyle.FixedSingle;
-            pixelPictureBox.Location = new Point(448, 12);
+            pixelPictureBox.Location = new Point(349, 12);
             pixelPictureBox.Name = "pixelPictureBox";
             pixelPictureBox.Size = new Size(309, 258);
             pixelPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -145,7 +147,7 @@
             // 
             colorModelComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             colorModelComboBox.FormattingEnabled = true;
-            colorModelComboBox.Items.AddRange(new object[] { "HSV", "Lab*", "RGB" });
+            colorModelComboBox.Items.AddRange(new object[] { "HSV", "HSL(未実装)", "その他、表色モデル案募集中" });
             colorModelComboBox.Location = new Point(80, 382);
             colorModelComboBox.Name = "colorModelComboBox";
             colorModelComboBox.Size = new Size(121, 23);
@@ -175,7 +177,7 @@
             // 
             limitItemComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             limitItemComboBox.FormattingEnabled = true;
-            limitItemComboBox.Items.AddRange(new object[] { "着色可能アイテム", "着色/製作可能アイテム", "全てのアイテム" });
+            limitItemComboBox.Items.AddRange(new object[] { "着色可能アイテム", "着色可能/ブロック/製作可能アイテム", "全てのアイテム" });
             limitItemComboBox.Location = new Point(80, 411);
             limitItemComboBox.Name = "limitItemComboBox";
             limitItemComboBox.Size = new Size(121, 23);
@@ -216,12 +218,23 @@
             debugButton.UseVisualStyleBackColor = true;
             debugButton.Click += debugButton_Click;
             // 
+            // soumulizedPictureBox
+            // 
+            soumulizedPictureBox.BorderStyle = BorderStyle.FixedSingle;
+            soumulizedPictureBox.Location = new Point(682, 12);
+            soumulizedPictureBox.Name = "soumulizedPictureBox";
+            soumulizedPictureBox.Size = new Size(309, 258);
+            soumulizedPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            soumulizedPictureBox.TabIndex = 21;
+            soumulizedPictureBox.TabStop = false;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.WhiteSmoke;
-            ClientSize = new Size(807, 511);
+            ClientSize = new Size(1126, 496);
+            Controls.Add(soumulizedPictureBox);
             Controls.Add(debugButton);
             Controls.Add(outputArtButton);
             Controls.Add(limitItemComboBox);
@@ -244,6 +257,7 @@
             ((System.ComponentModel.ISupportInitialize)originPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)pixelPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)horizontalNumericUpDown).EndInit();
+            ((System.ComponentModel.ISupportInitialize)soumulizedPictureBox).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -267,5 +281,6 @@
         private Button outputArtButton;
         private OpenFileDialog openImageFileDialog;
         private Button debugButton;
+        private PictureBox soumulizedPictureBox;
     }
 }

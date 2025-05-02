@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CKPixelArtist.model
 {
-    public enum PaintColor
+    public enum Variation
     {
-        //hack ペイント用のvariation値が一致するかゲームで確認する。現在は仮の値
+        // 色塗り系アイテム
         Unpainted = 0,
         Yellow = 1,
         Green = 2,
@@ -24,5 +24,14 @@ namespace CKPixelArtist.model
         Gray = 12,
         Peach = 13,
         Teal = 14,
+
+        // バケツの水源
+        NormalWater,
+        Lava,
+        AcidWater,
+        MoldWater,
+        SeaWater,
+        ShiningWater,
+        GrimyWater,
     }
 }

@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace CKPixelArtist.model
 {
-    public class Pixel
+    /// <summary>
+    /// RGB値を基本形とした複数の表色系モデルへの変換処理
+    /// 式差計算の都合上、全ての次元で重みを均等にするため、色相(Hue)等の値も0から100の範囲で正規化する。
+    /// </summary>
+    public record Pixel
     {
         public int R { get; set; }
         public int G { get; set; }
@@ -49,12 +53,20 @@ namespace CKPixelArtist.model
             {
                 hue = 60 * (((r - g) / delta) + 4);
             }
+            // 色相を0〜100の範囲に正規化
+            hue = hue * 100 / 360;
 
             // Saturationの計算
             saturation = max == 0 ? 0 : delta / max * 100;
 
             // Valueの計算
             value = max * 100;
+        }
+
+        public void ToHSL(out double H, out double S, out double L)
+        {
+            //TODO : HSLの計算を実装
+            throw new NotImplementedException();
         }
 
         public void ToLab(out double L, out double a, out double b)

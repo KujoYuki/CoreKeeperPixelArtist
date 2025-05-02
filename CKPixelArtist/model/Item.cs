@@ -21,7 +21,7 @@ namespace CKPixelArtist.model
 
         public string Name { get; set; }
 
-        public Pixel Color => Define.CollectableColor[(Id, (PaintColor)Variation)];
+        public Pixel Color => Define.CollectableColor[(Id, (Variation)Variation)];
 
     }
 }
