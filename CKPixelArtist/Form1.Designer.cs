@@ -100,6 +100,7 @@
             pixelPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             pixelPictureBox.TabIndex = 4;
             pixelPictureBox.TabStop = false;
+            pixelPictureBox.Paint += PixelPictureBox_Paint;
             // 
             // label2
             // 
@@ -133,8 +134,6 @@
             // keepAspectCheckBox
             // 
             keepAspectCheckBox.AutoSize = true;
-            keepAspectCheckBox.Checked = true;
-            keepAspectCheckBox.CheckState = CheckState.Checked;
             keepAspectCheckBox.Location = new Point(218, 350);
             keepAspectCheckBox.Name = "keepAspectCheckBox";
             keepAspectCheckBox.Size = new Size(116, 19);
@@ -227,6 +226,7 @@
             soumulizedPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             soumulizedPictureBox.TabIndex = 21;
             soumulizedPictureBox.TabStop = false;
+            soumulizedPictureBox.Paint += PixelPictureBox_Paint;
             // 
             // Form1
             // 

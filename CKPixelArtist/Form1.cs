@@ -122,6 +122,7 @@ namespace CKPixelArtist
             SoumulizePixelArt(pixelArtImage, (MaterialColorLimit)limitItemComboBox.SelectedIndex, (ColorModel)colorModelComboBox.SelectedIndex);
         }
 
+        // HACK 計算ロジックはいずれ別クラスに分ける予定
         private void SoumulizePixelArt(Bitmap pixelArtImage, MaterialColorLimit colorLimit, ColorModel colorModel)
         {
             Dictionary<(int ObjectId, Variation Variation), Pixel> availableColorDic = Define.PaintableColor;
@@ -154,9 +155,88 @@ namespace CKPixelArtist
 
             int width = pixelArtImage.Width;
             int height = pixelArtImage.Height;
+            Item[,] approximateMatrix = new Item[height, width];
 
-            Bitmap resizedImage = new Bitmap(pixelPictureBox.Image);
-            soumulizedPictureBox.Image = resizedImage;
+            Bitmap soumulizeImage = new Bitmap(pixelPictureBox.Image);
+
+            for (int v = 0; v < height; v++)
+            {
+                for (int h = 0; h < width; h++)
+                {
+                    // ピクセルの色を取得
+                    Color pixelColor = pixelArtImage.GetPixel(v, h);
+                    // 近似素材を決定する
+                    approximateMatrix[v, h] = MatchNearestColor(pixelColor, availableColorDic, colorModel); //hack 色が正しく取れてない？
+                    Pixel nearestColor = new Pixel(pixelColor.R.ToString("X2") + pixelColor.G.ToString("X2") + pixelColor.B.ToString("X2"));
+                    try
+                    {
+                        nearestColor = approximateMatrix[v, h].Color;
+                    }
+                    catch (Exception)
+                    {
+                        nearestColor = new Pixel("000000");
+                    }
+
+                    //var nearestColor = approximateMatrix[v, h].Color;
+                    soumulizeImage.SetPixel(v, h, Color.FromArgb(nearestColor.R, nearestColor.G, nearestColor.B));
+                }
+            }
+
+            soumulizedPictureBox.Image = soumulizeImage;
+        }
+
+        private Item MatchNearestColor(Color origin_color, Dictionary<(int ObjectId, Variation Variation), Pixel> availableColorDic, ColorModel colorModel)
+        {
+            var nearestItem = Item.Empty;
+            nearestItem.Delta = double.MaxValue;
+            Pixel pixel = new(ColorHelper.ToHex(origin_color));
+
+            // 色差を計算して近似色を決定する
+            foreach (var color in availableColorDic.Values)
+            {
+                double distance;
+                switch (colorModel)
+                {
+                    case ColorModel.HSV:
+                        pixel.ToHSV(out double idealHue, out double idealSaturation, out double idealValue);
+                        color.ToHSV(out double hue, out double saturation, out double value);
+                        distance = Math.Pow(idealHue - hue, 2) +
+                            Math.Pow(idealSaturation - saturation, 2) +
+                            Math.Pow(idealValue - value, 2);
+                        break;
+                    case ColorModel.HSL:
+                        throw new NotImplementedException();
+                    default:
+                        throw new ArgumentException();
+                }
+
+                // 確認用
+                if (nearestItem.Delta == 0)
+                {
+                    Console.WriteLine($"最小距離が0になっちゃった");
+                }
+
+                if (distance < nearestItem.Delta)
+                {
+                    nearestItem.Delta = distance;
+                    // TODO availableColorDicからキーとなる情報を取得
+                    int objectId = default;
+                    Variation variation = 0;
+                    foreach (var key in availableColorDic.ToList())
+                    {
+                        if (availableColorDic[key.Key].R == pixel.R &&
+                            availableColorDic[key.Key].G == pixel.G &&
+                            availableColorDic[key.Key].B == pixel.B)
+                        {
+                            objectId = key.Key.ObjectId;
+                            variation = key.Key.Variation;
+                        }
+                    }
+                    nearestItem = new Item(objectId, (int)variation);
+                }
+            }
+            // 最も近い色を持つアイテムを取得
+            return nearestItem;
         }
 
         private Bitmap GeneratePixelArt(Bitmap originalImage, int width, int height)
@@ -167,7 +247,7 @@ namespace CKPixelArtist
             // HACK セルシェーディングを行う
 
             // 縮小画像を元のサイズに拡大（ピクセルアート風にする）
-            Bitmap pixelArtImage = new Bitmap(resizedImage.Width * 10, resizedImage.Height * 10);
+            Bitmap pixelArtImage = new Bitmap(resizedImage.Width, resizedImage.Height);
             using (Graphics g = Graphics.FromImage(pixelArtImage))
             {
                 // 拡大時に補間を無効化してピクセル感を保つ
@@ -175,7 +255,7 @@ namespace CKPixelArtist
                 g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
                 g.DrawImage(resizedImage, new Rectangle(0, 0, pixelArtImage.Width, pixelArtImage.Height));
             }
-            
+
             return pixelArtImage;
         }
 
@@ -201,6 +281,16 @@ namespace CKPixelArtist
             var debugPixel = new Pixel("723C11");
             debugPixel.ToHSV(out double hue, out double saturation, out double value);
             MessageBox.Show($"{objectName}\nHue: {hue:F2}, Saturation: {saturation:F2}, Value: {value:F2}");
+        }
+
+        private void PixelPictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            if (sender is PictureBox pictureBox && pictureBox.Image != null)
+            {
+                e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor; // 補間を無効化
+                e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half; // ピクセルの位置を調整
+                e.Graphics.DrawImage(pictureBox.Image, pictureBox.ClientRectangle);
+            }
         }
     }
 }
