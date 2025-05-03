@@ -287,9 +287,38 @@ namespace CKPixelArtist
         {
             if (sender is PictureBox pictureBox && pictureBox.Image != null)
             {
+                // PictureBoxの描画領域
+                var clientRect = pictureBox.ClientRectangle;
+
+                // 画像の元のサイズ
+                var image = pictureBox.Image;
+                var imageWidth = image.Width;
+                var imageHeight = image.Height;
+
+                // アスペクト比を維持したサイズを計算
+                float aspectRatio = (float)imageWidth / imageHeight;
+                int drawWidth, drawHeight;
+                if (clientRect.Width / (float)clientRect.Height > aspectRatio)
+                {
+                    // PictureBoxが横長の場合
+                    drawHeight = clientRect.Height;
+                    drawWidth = (int)(drawHeight * aspectRatio);
+                }
+                else
+                {
+                    // PictureBoxが縦長の場合
+                    drawWidth = clientRect.Width;
+                    drawHeight = (int)(drawWidth / aspectRatio);
+                }
+
+                // 中央に配置するためのオフセットを計算
+                int offsetX = (clientRect.Width - drawWidth) / 2;
+                int offsetY = (clientRect.Height - drawHeight) / 2;
+
+                // 補間モードを設定して描画
                 e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor; // 補間を無効化
                 e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half; // ピクセルの位置を調整
-                e.Graphics.DrawImage(pictureBox.Image, pictureBox.ClientRectangle);
+                e.Graphics.DrawImage(image, new Rectangle(offsetX, offsetY, drawWidth, drawHeight));
             }
         }
     }
